@@ -6,17 +6,35 @@ import AddItem from "./AddItem";
 import SearchItem from "./SearchItem";
 
 function App() {
-  const [items, setItems] = useState(
-    JSON.parse(localStorage.getItem("shoppingList") || [])
-  );
+  const API_URL = "http://localhost:3500/items";
 
+  const [items, setItems] = useState([]);
   const [newItems, setNewItems] = useState("");
   const [search, setSearch] = useState("");
+  const [fetchaError, setFetchError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem("shoppingList", JSON.stringify(items));
-  }, [items])
- 
+    const fetchItems = async () => {
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw Error("did not receive expected data");
+        const data = await response.json();
+        console.log(data);
+        setItems(data);
+        setFetchError(null);
+      } catch (err) {
+        setFetchError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    setTimeout(() => {
+      (async () => await fetchItems())();
+    }, 2000);
+    
+  }, []);
 
   const addItem = (item) => {
     const id = items.length ? items[items.length - 1].id + 1 : 1;
@@ -52,24 +70,23 @@ function App() {
         setNewItems={setNewItems}
         handleSubmit={handleSubmit}
       />
-      <SearchItem 
-        search={search} 
-        setSearch={setSearch} 
-      />
-      <Contents
-        items={items.filter((item) =>
-          item.item.toLowerCase().includes(search.toLowerCase())
+      <SearchItem search={search} setSearch={setSearch} />
+      <main>
+        {isLoading && <p>Loading Items....</p>}
+        {fetchaError && (
+          <p style={{ color: "red" }}>{`Error: ${fetchaError}`}</p>
         )}
-        handleCheck={handleCheck}
-        handleDelete={handleDelete}
-      />
+        {!fetchaError && !isLoading && <Contents
+          items={items.filter((item) =>
+            item.item.toLowerCase().includes(search.toLowerCase())
+          )}
+          handleCheck={handleCheck}
+          handleDelete={handleDelete}
+        />}
+      </main>
       <Footer length={items.length} />
     </div>
   );
 }
 
 export default App;
-
-
-
-
