@@ -1,0 +1,22 @@
+{
+  "posts": [
+    {
+      "id": "3",
+      "title": "My 3rd Post",
+      "datetime": "July 01, 2021 11:17:36 AM",
+      "body": "Lorem ipsum dolor sit amet  xcepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
+    },
+    {
+      "id": "31",
+      "title": "Recently updated with axios",
+      "datetime": "March 19, 2025 7:38:59 PM",
+      "body": "I'm here to check "
+    },
+    {
+      "id": "311",
+      "title": "Good Night",
+      "datetime": "March 19, 2025 11:25:06 PM",
+      "body": "gonna sleep"
+    }
+  ]
+}

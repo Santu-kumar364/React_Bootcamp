@@ -4,35 +4,43 @@ import Footer from "./Footer";
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { format } from 'date-fns';
+import axios from "axios";
+ 
 
 function App() {
 
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: "My First Post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
-    },
-    {
-      id: 2,
-      title: "My 2nd Post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
-    },
-    {
-      id: 3,
-      title: "My 3rd Post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
-    } 
-  ])
-
+  const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const [postTitle, setPostTitle] = useState('');
   const [postBody, setPostBody] = useState('');
+  const [editTitle, setEditTitle] = useState('');
+  const [editBody, setEditBody] = useState('');
   const navigate = useNavigate();
+
+   const api = 'http://localhost:5000/posts';
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(api);
+        setPosts(response.data);
+
+      } catch (err) {
+        if (err.response) {
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+        } else {
+          console.log(`Error: ${err.message}`)
+        }
+      }
+    }
+
+    fetchData();
+
+  }, [])
 
 
   useEffect(() => {
@@ -45,24 +53,51 @@ function App() {
 
   }, [posts, search])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
     const datetime = format(new Date(), 'MMMM dd, yyyy pp');
     const newPost = { id, title: postTitle, datetime, body: postBody };
-    const allPosts = [...posts, newPost];
-    setPosts(allPosts);
-    setPostTitle('');
-    setPostBody("");
-    navigate('/');
-
+    try {
+      const response = await axios.post(api, newPost)
+      const allPosts = [...posts, response.data];
+      setPosts(allPosts);
+      setPostTitle('');
+      setPostBody("");
+      navigate('/');
+    } catch (err) {
+      console.log(`Error: ${err.message}`);
+    }
 
   }
 
-  const handleDelete = (id) => {
-    const postsList = posts.filter(post => post.id !== id);
-    setPosts(postsList);
-    navigate('/');
+  const handleEdit = async (id) => {
+    const datetime = format(new Date(), 'MMMM dd, yyyy pp');
+    const updatedPost = { id, title: editTitle, datetime, body: editBody };
+
+    try {
+      await axios.put(`${api}/${id}`, updatedPost);
+      const response = await axios.get(api)
+      setPosts(posts.map(post => post.id === id ? {...response.data } : post));
+      setEditTitle('')
+      setEditBody('')
+      navigate('/')
+    } catch (err) {
+      console.log(`Error: ${err.message}`);
+    }
+
+  }
+
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${api}/${id}`);
+      const postsList = posts.filter(post => post.id !== id);
+      setPosts(postsList);
+      navigate('/');
+    } catch (error) {
+      
+    }
 
   }
 
@@ -72,7 +107,7 @@ function App() {
       <Nav search={search} setSearch={setSearch} />
 
       {/* To pass the props when using router */}
-      <Outlet context={{ posts, handleDelete, handleSubmit, postTitle, setPostTitle, postBody, setPostBody, searchResult }} />
+      <Outlet context={{ posts, handleDelete, handleSubmit, postTitle, setPostTitle, postBody, setPostBody, searchResult, handleEdit, editBody, setEditBody, editTitle, setEditTitle }} />
 
       <Footer />
     </div>
@@ -83,5 +118,4 @@ export default App;
 
 
 
-
-
+ 

@@ -6,6 +6,7 @@ import Missing from "./Missing";
 import Home from "./Home";
 import About from "./About";
 import App from './App'
+import EditPost from "./EditPost";
 
 const router = createBrowserRouter([
     {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
                 path: "*",
                 element: <Missing />,
             },
+            {
+                path: '/edit/:id',
+                element: <EditPost/>
+            }
         ],
     }
 ]);
