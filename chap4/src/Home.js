@@ -3,16 +3,15 @@ import { useOutletContext } from "react-router-dom";
 import Feed from './Feed';
 
 const Home = () => {
-    const { searchResult } = useOutletContext(); // Get props from context
+    const { searchResult, fetchError, isLoading } = useOutletContext(); // Get props from context
+    console.log("Fetch Error:", fetchError);
+    
     return (
         <main className='Home'>
-            {searchResult.length ? (
-                <Feed posts={searchResult} />
-            ) : (
-                <p style={{ marginTop: "2rem" }}>
-                    No posts to display.
-                </p>
-            )}
+            {isLoading && <p className='statusMsg'>Loading posts...</p>}
+            {!isLoading && fetchError && <p className='statusMsg' style={{ color: "red" }}>{fetchError}</p>}
+            {!isLoading && !fetchError && (searchResult.length ? <Feed posts={searchResult} /> : <p className='statusMsg'>No posts to display.</p>)}
+
         </main>
     )
 }
