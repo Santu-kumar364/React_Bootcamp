@@ -4,8 +4,6 @@ import Feed from './Feed';
 
 const Home = () => {
     const { searchResult, fetchError, isLoading } = useOutletContext(); // Get props from context
-    console.log("Fetch Error:", fetchError);
-    
     return (
         <main className='Home'>
             {isLoading && <p className='statusMsg'>Loading posts...</p>}

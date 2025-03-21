@@ -5,8 +5,9 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { format } from 'date-fns';
 import axios from "axios";
-import useWindowSize from "./hooks/useWindowSize";
+import useWindowSize from "./hooks/useWindowSize";     
 import useAxiosFetch from "./hooks/useAxiosFetch";
+import api from "./api/url";
 
 
 function App() {
@@ -17,16 +18,14 @@ function App() {
   const [postBody, setPostBody] = useState('');
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
+
   const navigate = useNavigate();
   const { width } = useWindowSize();
-
-  const api = 'http://localhost:3500/posts';    // API_URL
-
   const { data, fetchError, isLoading } = useAxiosFetch(api);
 
   useEffect(() => {
     setPosts(data);
-    
+
   }, [data])
 
 
@@ -88,7 +87,11 @@ function App() {
       <Nav search={search} setSearch={setSearch} />
 
       {/* To pass the props when using router */}
-      <Outlet context={{ posts, handleDelete, handleSubmit, postTitle, setPostTitle, postBody, setPostBody, searchResult, handleEdit, editBody, setEditBody, editTitle, setEditTitle, fetchError, isLoading }} />
+      <Outlet context={{
+        posts, handleDelete, handleSubmit, postTitle,setPostTitle,
+        postBody, setPostBody, searchResult, handleEdit, editBody,
+        setEditBody, editTitle, setEditTitle, fetchError, isLoading
+      }} />
 
       <Footer />
     </div>

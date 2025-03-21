@@ -12,7 +12,7 @@ const EditPost = () => {
         if (post) {
             setEditTitle(post.title);
             setEditBody(post.body);
-        }  
+        }
     }, [post, setEditTitle, setEditBody]);
 
     const handleSubmit = (e) => {

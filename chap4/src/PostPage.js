@@ -7,7 +7,6 @@ const PostPage = () => {
     const { id } = useParams();
     const post = posts.find(post => (post.id).toString() === id);
 
-
     return (
         <main className="PostPage">
             <article className="post">
