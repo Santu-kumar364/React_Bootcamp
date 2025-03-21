@@ -1,14 +1,15 @@
 import { useState, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import api from './api/posts';
 import DataContext from './context/DataContext';
+import axios from 'axios';
 
 const NewPost = () => {
     const [postTitle, setPostTitle] = useState('');
     const [postBody, setPostBody] = useState('');
     const { posts, setPosts } = useContext(DataContext);
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,16 +17,16 @@ const NewPost = () => {
         const datetime = format(new Date(), 'MMMM dd, yyyy pp');
         const newPost = { id, title: postTitle, datetime, body: postBody };
         try {
-            const response = await api.post('/posts', newPost);
-            const allPosts = [...posts, response.data];
-            setPosts(allPosts);
-            setPostTitle('');
-            setPostBody('');
-            history.push('/');
+          const response = await axios.post(api, newPost)
+          const allPosts = [...posts, response.data];
+          setPosts(allPosts);
+          setPostTitle('');
+          setPostBody("");
+          navigate('/');
         } catch (err) {
-            console.log(`Error: ${err.message}`);
+          console.log(`Error: ${err.message}`);
         }
-    }
+      }
 
     return (
         <main className="NewPost">

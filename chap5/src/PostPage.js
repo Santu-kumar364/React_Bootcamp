@@ -6,7 +6,7 @@ import axios from "axios";
 
 const PostPage = () => {
     const { posts, setPosts } = useContext(DataContext);
-    const { id } = useParams;
+    const { id } = useParams();
     const navigate = useNavigate();
     const post = posts.find(post => (post.id).toString() === id);
 

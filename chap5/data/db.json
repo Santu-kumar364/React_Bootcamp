@@ -29,6 +29,12 @@
       "title": "Capstone project ",
       "datetime": "March 20, 2025 4:34:48 PM",
       "body": "1. Each student from the group must submit the report on moodle based on the work they have completed till mid-semester individually. \n\n2. The mid-term evaluation will be done based on the report submitted by each student.\n\n3. The name of that file must be “GroupNumber_RollNo_Name.pdf”.\n\n"
+    },
+    {
+      "id": "211111111",
+      "title": "useContext",
+      "datetime": "March 21, 2025 4:22:17 PM",
+      "body": "implemented useContext & Outlet"
     }
   ]
 }

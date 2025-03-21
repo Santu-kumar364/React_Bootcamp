@@ -9,10 +9,8 @@ function App() {
             <Header title="React-Blog-Posts" />
             <Nav />
 
-            {/* Main content area */}
-            <main>
-                <Outlet />
-            </main>
+            {/* Main content area */}  
+            <Outlet />
 
             <Footer />
         </div>

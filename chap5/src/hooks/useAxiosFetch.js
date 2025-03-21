@@ -24,7 +24,7 @@ const useAxiosFetch = (dataUrl) => {
                     setData([]);
                 }
             } finally {
-                setIsLoading(false);
+                isLoading && setIsLoading(false);
             }
         };
 
